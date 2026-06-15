@@ -1,0 +1,13 @@
+{
+  "name": "prometheus-eduai",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm --prefix eduai run dev",
+    "client": "npm --prefix eduai run client",
+    "server": "npm --prefix eduai run server",
+    "build": "npm --prefix eduai run build",
+    "preview": "npm --prefix eduai/client run preview -- --port 5173 --strictPort"
+  }
+}
