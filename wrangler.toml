@@ -1,0 +1,6 @@
+name = "prometheus-eduai"
+compatibility_date = "2026-06-15"
+pages_build_output_dir = "eduai/client/dist"
+
+[vars]
+VITE_API_BASE_URL = ""

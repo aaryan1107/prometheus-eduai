@@ -8,6 +8,8 @@
     "client": "npm --prefix eduai run client",
     "server": "npm --prefix eduai run server",
     "build": "npm --prefix eduai run build",
+    "cf:build": "npm --prefix eduai/client run build",
+    "cf:deploy": "npx wrangler pages deploy eduai/client/dist --project-name prometheus-eduai",
     "preview": "npm --prefix eduai/client run preview -- --port 5173 --strictPort"
   }
 }

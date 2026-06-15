@@ -2,8 +2,18 @@ const jsonHeaders = {
   "Content-Type": "application/json"
 };
 
+const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+
+function apiUrl(path) {
+  return `${apiBaseUrl}${path}`;
+}
+
+function apiFetch(path, options) {
+  return fetch(apiUrl(path), options);
+}
+
 export async function promiChat(payload) {
-  const response = await fetch("/api/promi/chat", {
+  const response = await apiFetch("/api/promi/chat", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -17,7 +27,7 @@ export async function promiChat(payload) {
 }
 
 export async function analyzeMock(payload) {
-  const response = await fetch("/api/mock/analyze", {
+  const response = await apiFetch("/api/mock/analyze", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -31,13 +41,13 @@ export async function analyzeMock(payload) {
 }
 
 export async function fetchMockTests() {
-  const response = await fetch("/api/mock/tests");
+  const response = await apiFetch("/api/mock/tests");
   if (!response.ok) throw new Error("Could not load mock tests.");
   return response.json();
 }
 
 export async function markingAssist(payload) {
-  const response = await fetch("/api/proposal/marking-assist", {
+  const response = await apiFetch("/api/proposal/marking-assist", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(typeof payload === "string" ? { scriptId: payload } : payload)
@@ -51,7 +61,7 @@ export async function markingAssist(payload) {
 }
 
 export async function lockScript(payload) {
-  const response = await fetch("/api/proposal/lock-script", {
+  const response = await apiFetch("/api/proposal/lock-script", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -65,13 +75,13 @@ export async function lockScript(payload) {
 }
 
 export async function fetchProposalData(kind) {
-  const response = await fetch(`/api/proposal/${kind}`);
+  const response = await apiFetch(`/api/proposal/${kind}`);
   if (!response.ok) throw new Error(`Could not load ${kind}.`);
   return response.json();
 }
 
 export async function addTextSource(payload) {
-  const response = await fetch("/api/sources/add-text", {
+  const response = await apiFetch("/api/sources/add-text", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -82,7 +92,7 @@ export async function addTextSource(payload) {
 }
 
 export async function updateSourceComment(sourceId, comment) {
-  const response = await fetch(`/api/sources/${sourceId}/comment`, {
+  const response = await apiFetch(`/api/sources/${sourceId}/comment`, {
     method: "PATCH",
     headers: jsonHeaders,
     body: JSON.stringify({ comment })
@@ -93,7 +103,7 @@ export async function updateSourceComment(sourceId, comment) {
 }
 
 export async function deleteSource(sourceId) {
-  const response = await fetch(`/api/sources/${sourceId}`, {
+  const response = await apiFetch(`/api/sources/${sourceId}`, {
     method: "DELETE"
   });
 
@@ -102,7 +112,7 @@ export async function deleteSource(sourceId) {
 }
 
 export async function addUrlSource(payload) {
-  const response = await fetch("/api/sources/add-url", {
+  const response = await apiFetch("/api/sources/add-url", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -113,13 +123,13 @@ export async function addUrlSource(payload) {
 }
 
 export async function fetchSources() {
-  const response = await fetch("/api/sources");
+  const response = await apiFetch("/api/sources");
   if (!response.ok) throw new Error("Could not load source library.");
   return response.json();
 }
 
 export async function searchSources(payload) {
-  const response = await fetch("/api/sources/search", {
+  const response = await apiFetch("/api/sources/search", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -133,7 +143,7 @@ export async function extractFileText(file) {
   const body = new FormData();
   body.append("file", file);
 
-  const response = await fetch("/api/files/extract", {
+  const response = await apiFetch("/api/files/extract", {
     method: "POST",
     body
   });
@@ -147,19 +157,19 @@ export async function extractFileText(file) {
 }
 
 export async function fetchTeacherWorkload() {
-  const response = await fetch("/api/teacher-workload");
+  const response = await apiFetch("/api/teacher-workload");
   if (!response.ok) throw new Error("Could not load teacher workload.");
   return response.json();
 }
 
 export async function fetchTeacherWorkloadSummary() {
-  const response = await fetch("/api/teacher-workload/summary");
+  const response = await apiFetch("/api/teacher-workload/summary");
   if (!response.ok) throw new Error("Could not load workload summary.");
   return response.json();
 }
 
 export async function updateTeacherWorkloadStatus(assignmentId, status) {
-  const response = await fetch(`/api/teacher-workload/${assignmentId}/status`, {
+  const response = await apiFetch(`/api/teacher-workload/${assignmentId}/status`, {
     method: "PATCH",
     headers: jsonHeaders,
     body: JSON.stringify({ status })
@@ -170,19 +180,19 @@ export async function updateTeacherWorkloadStatus(assignmentId, status) {
 }
 
 export async function fetchAssessmentPackages() {
-  const response = await fetch("/api/assessment-packages");
+  const response = await apiFetch("/api/assessment-packages");
   if (!response.ok) throw new Error("Could not load assessment packages.");
   return response.json();
 }
 
 export async function fetchEvaluationVault() {
-  const response = await fetch("/api/assessment-packages/vault/audit");
+  const response = await apiFetch("/api/assessment-packages/vault/audit");
   if (!response.ok) throw new Error("Could not load evaluation vault.");
   return response.json();
 }
 
 export async function createAssessmentPackage(payload) {
-  const response = await fetch("/api/assessment-packages", {
+  const response = await apiFetch("/api/assessment-packages", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -193,7 +203,7 @@ export async function createAssessmentPackage(payload) {
 }
 
 export async function updateAssessmentPackageUploadStatus(packageId, payload) {
-  const response = await fetch(`/api/assessment-packages/${packageId}/upload-status`, {
+  const response = await apiFetch(`/api/assessment-packages/${packageId}/upload-status`, {
     method: "PATCH",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -204,7 +214,7 @@ export async function updateAssessmentPackageUploadStatus(packageId, payload) {
 }
 
 export async function updateAssessmentPackageGradingStatus(packageId, gradingStatus) {
-  const response = await fetch(`/api/assessment-packages/${packageId}/grading-status`, {
+  const response = await apiFetch(`/api/assessment-packages/${packageId}/grading-status`, {
     method: "PATCH",
     headers: jsonHeaders,
     body: JSON.stringify({ gradingStatus })
@@ -215,7 +225,7 @@ export async function updateAssessmentPackageGradingStatus(packageId, gradingSta
 }
 
 export async function recordEvaluationAudit(payload) {
-  const response = await fetch("/api/assessment-packages/vault/audit", {
+  const response = await apiFetch("/api/assessment-packages/vault/audit", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -226,7 +236,7 @@ export async function recordEvaluationAudit(payload) {
 }
 
 export async function createStudentGroup(payload) {
-  const response = await fetch("/api/assessment-packages/groups", {
+  const response = await apiFetch("/api/assessment-packages/groups", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -237,13 +247,13 @@ export async function createStudentGroup(payload) {
 }
 
 export async function fetchStudents() {
-  const response = await fetch("/api/students");
+  const response = await apiFetch("/api/students");
   if (!response.ok) throw new Error("Could not load students.");
   return response.json();
 }
 
 export async function importStudents(payload) {
-  const response = await fetch("/api/students/import", {
+  const response = await apiFetch("/api/students/import", {
     method: "POST",
     headers: jsonHeaders,
     body: JSON.stringify(payload)
@@ -254,7 +264,7 @@ export async function importStudents(payload) {
 }
 
 export async function clearStudents() {
-  const response = await fetch("/api/students", {
+  const response = await apiFetch("/api/students", {
     method: "DELETE"
   });
 
